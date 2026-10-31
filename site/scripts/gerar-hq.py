@@ -5,6 +5,7 @@ from html import escape
 import argparse
 import json
 import re
+from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
@@ -40,6 +41,12 @@ cover_title = 'Quando cinco<br>luzes <em>se encontram.</em>' if data['title'] ==
 characters = json.loads((DIST / 'dados/cavaleiros.json').read_text(encoding='utf-8'))
 character_links = ''.join(f'<a href="../cavaleiros/{e(c["id"])}.html" style="--aura:{e(c["color"])}">{e(c["name"])}</a>' for c in characters)
 color_marks = ''.join(f'<span style="--aura:{e(c["color"])}"></span>' for c in characters)
+
+PDF_NAME = 'quando-cinco-luzes-se-encontram.pdf'
+share_message = f'🔥📖 Conheça a HQ de origem dos cinco cavaleiros do PLANO D: 8 páginas e 24 quadros sobre fé em Deus, inclusão neurodivergente e cuidado socioambiental.\n\nLeia gratuitamente, sem login:\n{PUBLIC}/hq/\n\nNa página você também pode baixar o PDF e ler a versão em texto.'
+share_url = 'https://wa.me/?text=' + quote(share_message, safe='')
+resources = f'''<aside class="hq-resources" aria-labelledby="hq-resources-title"><div><p class="eyebrow">LEVE A HISTÓRIA COM VOCÊ</p><h2 id="hq-resources-title">Para guardar e compartilhar.</h2><p>Baixe a HQ ou convide alguém para conhecer os cinco cavaleiros.</p></div><div class="hq-resource-actions"><a class="button button-secondary" href="{PDF_NAME}" download="PLANO-D-HQ-origem.pdf">Baixar HQ em PDF ↓</a><a class="button button-primary" href="{e(share_url)}" target="_blank" rel="noopener noreferrer">Compartilhar HQ no WhatsApp ↗</a></div><p class="hq-resource-note">PDF com 10 folhas: capa, oito páginas ilustradas e créditos. A mensagem do WhatsApp fica pronta; você escolhe para quem enviar.</p></aside>'''
+
 
 header = '''<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
 <header class="site-header hq-header"><div class="hq-wrap header-inner">
@@ -115,13 +122,14 @@ html = document_head(data['title'], description, 'hq/', with_script=True) + f'''
       <div class="hq-cover-copy"><p class="eyebrow">HQ 01 · A origem dos cinco cavaleiros</p>
         <h1 id="hq-title">{cover_title}</h1>
         <p class="hq-deck">{e(data['premise'])}</p>
-        <div class="hq-cover-actions"><a class="button button-primary" href="#pagina-1">Começar a leitura <span aria-hidden="true">↓</span></a><a class="text-link" href="texto.html">Versão em texto</a></div>
+        <div class="hq-cover-actions"><a class="button button-primary" href="#pagina-1">Começar a leitura <span aria-hidden="true">↓</span></a><a class="text-link" href="texto.html">Versão em texto</a><a class="text-link" href="{PDF_NAME}" download="PLANO-D-HQ-origem.pdf">Baixar PDF ↓</a></div>
         <p class="hq-cover-meta">8 páginas · 24 quadros · leia no seu ritmo</p>
         <div class="hq-constellation" aria-hidden="true">{color_marks}</div>
       </div>
       <figure class="hq-cover-art"><img src="../assets/cavaleiros-plano-d.webp" width="1536" height="1024" alt="Nexo, Raiz, Brasa, Prisma e Lúmen, os cinco cavaleiros cósmicos, em suas motocicletas diante da Terra." fetchpriority="high"><figcaption>REAVERSO · PLANO D · CINCO CAMINHOS, UM ENCONTRO</figcaption></figure>
     </section>
     <aside class="hq-intro-note" aria-label="Sobre esta história"><p>Uma aventura de ficção sobre aprender a ouvir, repartir recursos e transformar fé em cuidado. A comunidade participa das escolhas desde o começo.</p><a class="text-link" href="#apos-a-historia">Conheça os cavaleiros ↓</a></aside>
+    {resources}
     <section class="hq-reader" id="leitor" aria-labelledby="reader-title">
       <div class="reader-heading"><h2 id="reader-title">A história começa aqui.</h2><p>De cima para baixo, um quadro de cada vez.</p></div>
       <div class="reader-tools" id="reader-tools" hidden>
@@ -156,7 +164,7 @@ transcript = document_head(f'{data["title"]} · Versão em texto', 'Leitura inte
   <article class="hq-transcript">
     <p class="eyebrow">HQ 01 · Versão em texto</p><h1>{title}</h1>
     <p class="transcript-intro">{subtitle}. Aqui você encontra todas as narrações, falas e descrições das cenas, na mesma ordem da HQ ilustrada.</p>
-    <a class="button button-primary" href="index.html">Abrir a HQ ilustrada →</a>
+    <div class="hq-resource-actions"><a class="button button-primary" href="index.html">Abrir a HQ ilustrada →</a><a class="button button-secondary" href="{PDF_NAME}" download="PLANO-D-HQ-origem.pdf">Baixar HQ em PDF ↓</a></div>
     <nav class="transcript-index" aria-label="Índice da história"><ol>{index}</ol></nav>
     {''.join(transcript_articles)}
     <div class="transcript-return"><a class="text-link" href="index.html">← Voltar à HQ ilustrada</a></div>
@@ -170,4 +178,6 @@ output = DIST / 'hq'
 output.mkdir(exist_ok=True)
 (output / 'index.html').write_text(html, encoding='utf-8')
 (output / 'texto.html').write_text(transcript, encoding='utf-8')
+# Compatibilidade com links do rascunho anterior; a URL canônica continua /hq/.
+(output / 'origem.html').write_text(html, encoding='utf-8')
 print('HQ gerada: 8 páginas, 24 quadros e versão integral em texto.')
