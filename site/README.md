@@ -56,3 +56,10 @@ Edição de 22/10/2026. Oito páginas e 24 quadros contam as origens, o encontro
 - Fontes do cânone, prompts e registro das artes: `ARTE-HQ.md`.
 
 Endereço da HQ: https://plano-d-comunidade.aldenirmed.chatgpt.site/hq/
+
+
+### Continuação da HQ — download e compartilhamento
+
+A edição de oito páginas e 24 quadros foi preservada. O leitor em `dist/hq/index.html` e a versão em texto oferecem download de `dist/hq/quando-cinco-luzes-se-encontram.pdf`. O PDF contém dez folhas (capa, oito páginas com arte e texto selecionável e créditos). O botão do WhatsApp apenas abre a mensagem com o link público, para revisão e envio pelo visitante.
+
+O gerador `scripts/gerar-hq.py` também produz `dist/hq/origem.html` como endereço compatível, com a mesma HQ e URL canônica `/hq/`. Para atualizar o PDF, execute `python3 scripts/gerar-hq-pdf.py`; para atualizar as páginas, execute `python3 scripts/gerar-hq.py`. As imagens, os 24 quadros, as fichas, a biblioteca e os dados de doações não são alterados por esta continuação.

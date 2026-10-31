@@ -172,3 +172,13 @@ html:has(.hq-page) { scroll-behavior: auto; }
   .panel-caption { background: white; }
   .hq-credits { color: #111; }
 }
+
+/* Recursos da edição: download e mensagem que o visitante revisa antes de enviar. */
+.hq-resources { margin-block: 18px 35px; padding: 27px; background: #101a2b; border: 1px solid #49617e; border-left: 3px solid #ffd166; border-radius: 8px; }
+.hq-resources h2 { font-size: clamp(1.65rem,3vw,2.3rem); letter-spacing: -.04em; line-height: 1.15; margin-block: 11px 15px; }
+.hq-resources p:not(.eyebrow) { font-size: .9rem; line-height: 1.85; color: #c1cde0; }
+.hq-resource-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 21px; align-items: center; }
+.hq-resources .hq-resource-note { font-size: .75rem; margin-top: 19px; max-width: 780px; }
+.hq-transcript > .hq-resource-actions { margin-block: 25px; }
+@media (max-width: 700px) { .hq-resources { padding: 22px; margin-bottom: 28px; } .hq-resource-actions { gap: 12px; } .hq-resource-actions .button { font-size: .76rem; } }
+@media print { .hq-resources, .hq-resource-actions { display: none !important; } }
